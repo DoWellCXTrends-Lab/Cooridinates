@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+<body>
+ <h1>Get cooridinated</h1>
+
+  <form id="myForm">
+    
+    <label for="email">REGION:</label>
+    <input type="text" id="region" name="region"><br><br>
+    <input type="submit" value="Submit">
+  </form>
+<p id="lat"></p>
+<p id="lng"></p>
+  <script>
+
+    function makeAPICall(formData) {
+     
+      var xhr = new XMLHttpRequest();
+
+      var url = "https://100074.pythonanywhere.com/get-coords/";
+
+      xhr.open("POST", url, true);
+
+   
+      xhr.setRequestHeader("Content-Type", "application/json");
+
+      xhr.onreadystatechange = function () {
+        if (xhr.readyState === 4 && xhr.status === 200) {
+        
+          var response = JSON.parse(xhr.responseText);
+
+        
+          console.log(response);
+         document.getElementById("lat").innerHTML="lat " + response.Coords.lat;
+         document.getElementById("lng").innerHTML="lng " + response.Coords.lng;
+        }
+      };
+
+      
+      var jsonData = JSON.stringify(formData);
+
+      xhr.send(jsonData);
+    }
+
+    
+    document.getElementById("myForm").addEventListener("submit", function (event) {
+      event.preventDefault(); // Prevent the default form submission
+
+      
+      var region = document.getElementById("region").value;
+
+      
+      var formData = {
+        
+        region:region
+      };
+
+     
+      makeAPICall(formData);
+    });
+  </script>
+</body>
+</html>
